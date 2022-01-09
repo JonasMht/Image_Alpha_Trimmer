@@ -6,7 +6,5 @@ all:
 	
 .PHONY: install_tools
 install_tools:
-	sudo apt install imagemagick-6.q16
-
-
+	./install.sh
 

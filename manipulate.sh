@@ -55,7 +55,7 @@ do
 	echo "$file"
 	echo "$new_file"
 	
-	tmpfile=$(mktemp /tmp/abc-script.XXXXXX)
+	tmpfile=$(mktemp /tmp/my_tmp_file.XXXXXX)
 	cp -fr "$file" "$tmpfile"
 	
 	if $resize; then

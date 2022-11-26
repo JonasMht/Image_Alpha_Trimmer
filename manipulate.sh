@@ -49,7 +49,7 @@ echo "Percentage: $percentage%";
 echo "Resize?: $resize";
 echo "Trim?: $trim";
 
-for file in Input/*.png
+for file in Input/*
 do
 	new_file=$(echo "$file" | sed -e 's/Input/Output/g')
 	echo "$file"

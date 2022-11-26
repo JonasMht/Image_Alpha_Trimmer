@@ -61,7 +61,7 @@ do
 	if $resize; then
 		#convert "$tmpfile" -channel alpha -threshold 0% "$tmpfile"
 		#convert "$tmpfile" -adaptive-sharpen 0x3 "$tmpfile"
-		convert "$tmpfile" -adaptive-resize "$percentage%" -sharpen 0x10 "$tmpfile"
+		convert "$tmpfile" -adaptive-resize "$percentage%" "$tmpfile"
 		#convert "$tmpfile"  "$tmpfile"
 	fi
 	if $trim; then

@@ -1,10 +1,9 @@
 ### Image resizing
 
-import sys
 import cv2
 import os
 import numpy as np
-
+import sys
 
 # function to load all the images with transparency and their filename in a directory using OpenCV
 def load_images_from_folder(folder):
@@ -31,8 +30,13 @@ def remove_alpha_edges_from_images(images):
 
 
 # Function to resize images using openCV
-def resize_images(images, size):
+def resize_images(images, factor):
     for i in range(len(images)):
+        # Get the size of the image
+        height, width = images[i][0].shape[:2]
+        # Resize the image
+        size = (int(width * factor), int(height * factor))
+
         ## Interpolation methods of cv2.resize():
         # INTER_NEAREST: nearest neighbor interpolation technique
         # INTER_LINEAR: bilinear interpolation (default)
@@ -48,51 +52,48 @@ def resize_images(images, size):
     return images
 
 # Function that resizes images and then removes the alpha edges using OpenCV
-def resize_and_remove_alpha_edges(images, size):
-    images = resize_images(images, size)
+def resize_and_remove_alpha_edges(images, factor):
+    images = resize_images(images, factor)
     images = remove_alpha_edges_from_images(images)
     return images
 
 # Function to save images to a directory using OpenCV
-def save_images_to_folder(path, images):
-    if not os.path.exists(path):
-        os.makedirs(path)
-        print("Created folder ", path)
+def save_images_to_folder(folder, images):
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+        print("Created folder ", folder)
     for image in images:
-        cv2.imwrite(os.path.join(path, image[1]), image[0])
+        cv2.imwrite(os.path.join(folder, image[1]), image[0])
 
 # function to save images to a directory using OpenCV keeping transparency
-def save_images_to_folder_with_alpha(path, images):
-    if not os.path.exists(path):
-        os.makedirs(path)
-        print("Created folder ", path)
+def save_images_to_folder_with_alpha(folder, images):
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+        print("Created folder ", folder)
     for image in images:
-        cv2.imwrite(os.path.join(path, image[1]), image[0], [cv2.IMWRITE_PNG_COMPRESSION, 0])
+        cv2.imwrite(os.path.join(folder, image[1]), image[0], [cv2.IMWRITE_PNG_COMPRESSION, 0])
 
+src = ""
+dst = ""
+factor = 1.0
 
-src_path = ""
-dst_path = ""
-size = 0
+# get src dst and factor from user python input
+if len(sys.argv) > 1:
+    src = sys.argv[1]
+    dst = sys.argv[2]
+    factor = float(sys.argv[3])
 
-if len(sys.argv) != 4:
-    print("Usage: python resize-images.py <src_path> <dst_path> <size>")
-    exit()
-else:
-    src_path = sys.argv[1]
-    dst_path = sys.argv[2]
-    size = int(sys.argv[3])
+if src == "" or dst == "":
+    print("Please provide src and dst folder")
+    sys.exit()
 
-if not os.path.exists(src_path):
-    print("Source folder does not exist")
-    exit()
-
-if not os.path.exists(dst_path):
-    os.makedirs(dst_path)
-    print("Created folder ", dst_path)
+# If folder does not exist create it
+if not os.path.exists(dst):
+    os.makedirs(dst)
+    print("Created folder ", dst)
 
 # Resize
 
-images = load_images_from_folder(src_path)
-images = resize_and_remove_alpha_edges(images, (size, size))
-
-save_images_to_folder(dst_path, images)
+images = load_images_from_folder(src)
+images = resize_and_remove_alpha_edges(images, factor)
+save_images_to_folder(dst, images)
